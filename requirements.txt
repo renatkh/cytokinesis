@@ -1,0 +1,8 @@
+opencv-python
+scipy
+numpy
+Pillow
+matplotlib
+PyQt5
+lmfit
+mahotas
