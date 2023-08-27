@@ -6,7 +6,8 @@ Created on Feb 14, 2012
 import cv2, fitEllipse2, fitEllipse
 from myMath import weightedAveStd, fitCirc, getSubIndex
 from myFunc import a16a8, cropRotate
-import matplotlib, Image, mahotas
+import matplotlib, mahotas
+from PIL import Image
 import matplotlib.pyplot as plt
 from scipy.ndimage import filters
 import numpy as np

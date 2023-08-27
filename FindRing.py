@@ -1,13 +1,21 @@
-import cStringIO, sys, csv, copy, ImageDraw, Image, ImageClass
-from FindCenter import findCenter, showIm, getBiImList, getEllipse, getView
-from PyQt4 import QtGui
-from myFunc import detect_peaks, pil16pil8, a16a8, getStrVal
-from myMath import fitLine, fitCirc
-from myFigure import myFigure
-from scipy import ndimage, optimize
-import numpy as np
+import copy
+import csv
+import io
+import sys
+
 import matplotlib.pyplot as plt
+import numpy as np
+from PIL import Image, ImageDraw
+from PyQt5 import QtGui, QtWidgets
+from scipy import ndimage, optimize
 from scipy.ndimage import filters
+
+import ImageClass
+from FindCenter import findCenter, getBiImList, getEllipse, getView, showIm
+from myFigure import myFigure
+from myFunc import a16a8, detect_peaks, getStrVal, pil16pil8
+from myMath import fitCirc, fitLine
+
 
 def getRing(dataList,tol,kernelSize,nIter, ringCenterY, ringSizePrev, meanSizeRate,\
              centralPlane, ringCenterXPrev):
@@ -18,7 +26,7 @@ def getRing(dataList,tol,kernelSize,nIter, ringCenterY, ringSizePrev, meanSizeRa
     maxPointsX = []
     maxPointsY = []
     for data in dataList:
-        data = np.array(filters.gaussian_filter(data,kernelSize),dtype = np.uint8)
+        data = np.array(filters.gaussian_filter(data, kernelSize), dtype=np.uint8)
         if np.sum(data) == 0:
             data = dataListConv[-1]
         maxima, x, y = detect_peaks(data)
@@ -475,7 +483,7 @@ def reportFindCenter(timePointStart, angle, embCenterX, embCenterY, embryoDiam, 
 def processEmbryo():
     global check,lateStage
     
-    app = QtGui.QApplication(sys.argv)
+    app = QtWidgets.QApplication(sys.argv)
     angle, embCenterX, embCenterY, embryoDiam, embCenterXerr, embCenterYerr, embryoDiamErr = findCenter(filename,nSlices,zPixelScale,flip,mahFlag, Ham)
     reportFindCenter(timePointStart, angle, embCenterX, embCenterY, embryoDiam, embCenterXerr, embCenterYerr, embryoDiamErr)
      
@@ -485,13 +493,15 @@ def processEmbryo():
         return inter + slope* time, time*se+ie
      
     ringSizePrev = embryoDiam
-    outStringIO = cStringIO.StringIO()
+    outStringIO = io.StringIO()
+
     outStringIO.write('embryoDiam = '+ str(embryoDiam)+' '+str(embryoDiamErr)+'\n')
     outStringIO.write('angle = '+str(int(angle))+'\n'+'embryoCenterX = '+str(embCenterX)+' '+str(embCenterXerr)+'\n')
     outStringIO.write('timePint, embryoCenterY, embCenterYerr'+'\n')
+
     for i in range(len(embCenterY)):
         outStringIO.write(str(i)+' ' + str(embCenterY[i])+' '+str(embCenterYerr[i])+'\n')
-     
+
     im = Image.open(filename)
     im.seek((timePointStart)*nSlices)
     dataList = []

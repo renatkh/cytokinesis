@@ -12,13 +12,13 @@ import cv2
 from myMath import getSig
 import scipy.ndimage as ndimage
 import scipy.ndimage.filters as filters
-from PyQt4 import QtGui
+from PyQt5 import QtGui
 
 def pil16pil8(im):
     return Image.fromarray(pil16a8(im))
 
 def a16a8(im, imMin=None, imMax=None):
-    im = im.astype(np.float)
+    im = im.astype(np.float16)
     if np.max(im)>0:
         if imMax is None: imMax = np.max(im[np.where(im>0)])
         if imMin is None: imMin = np.min(im[np.where(im>0)])

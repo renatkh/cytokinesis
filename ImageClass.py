@@ -1,12 +1,12 @@
 import numpy as np
-from PyQt4 import QtCore, QtGui
-from matplotlib.backends.backend_qt4agg import FigureCanvasQTAgg as FigureCanvas
+from PyQt5 import QtCore, QtWidgets, QtGui
+from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.figure import Figure
 from ImageWindowUI import *
-import Image
+from PIL import Image
 from myFunc import PIL2QPixmap
 
-class ImageWindow(QtGui.QDialog):
+class ImageWindow(QtWidgets.QDialog):
     def __init__(self,fileName,parent=None,imSeq=None, arraySeq=None, surfaceSeq=None):
         # Define all elements necessary for the image manipulations
         self.fileName = fileName
